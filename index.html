@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yeni Mezun Makinacılar Anketi</title>
+<meta name="description" content="İTÜ Makina mezunları çalışma hayatı anketinin canlı sonuç sayfası.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --surface-2: #efece3;
+    --border: #ddd7c8;
+    --text: #26241f;
+    --text-secondary: #5d5848;
+    --text-muted: #8a8471;
+    --accent: #a6462b;
+    --accent-2: #2f5f56;
+    --accent-soft: #e9ddd2;
+    --good: #2f7d5c;
+    --bad: #a6462b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1815;
+      --surface: #242019;
+      --surface-2: #2c271e;
+      --border: #3c352a;
+      --text: #f1ece1;
+      --text-secondary: #c7bfab;
+      --text-muted: #8f8770;
+      --accent: #e08a63;
+      --accent-2: #7fbfae;
+      --accent-soft: #3a2c22;
+      --good: #7fbfae;
+      --bad: #e08a63;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1815;
+    --surface: #242019;
+    --surface-2: #2c271e;
+    --border: #3c352a;
+    --text: #f1ece1;
+    --text-secondary: #c7bfab;
+    --text-muted: #8f8770;
+    --accent: #e08a63;
+    --accent-2: #7fbfae;
+    --accent-soft: #3a2c22;
+    --good: #7fbfae;
+    --bad: #e08a63;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+  header { margin-bottom: 40px; }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4.5vw, 40px);
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .subtitle { color: var(--text-secondary); font-size: 15px; max-width: 60ch; }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin-top: 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .meta-row span b { color: var(--text-secondary); font-weight: 500; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 44px;
+  }
+  .stat-tile { background: var(--surface); padding: 20px 18px; }
+  .stat-tile .num {
+    font-family: "Newsreader", serif;
+    font-size: 30px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-tile .lbl { margin-top: 4px; font-size: 12.5px; color: var(--text-muted); }
+
+  section { margin-bottom: 40px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  h2 { font-family: "Newsreader", serif; font-weight: 600; font-size: 19px; margin: 0; }
+  .section-note { font-size: 12px; color: var(--text-muted); }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(90px, 200px) 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 0;
+  }
+  .bar-label {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bar-track { height: 10px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; min-width: 3px; }
+  .bar-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    white-space: nowrap;
+    text-align: right;
+    min-width: 60px;
+  }
+  .bar-pct { color: var(--text-muted); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: minmax(70px, 130px) 1fr auto; }
+  }
+
+  /* --- raw answers table --- */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .filter-field { display: flex; flex-direction: column; gap: 4px; }
+  .filter-field label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  .filter-field select,
+  .filter-field input {
+    font: inherit;
+    font-size: 13px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    min-width: 140px;
+  }
+  .filter-field input { min-width: 200px; }
+  .filter-reset {
+    align-self: flex-end;
+    font-size: 12.5px;
+    color: var(--accent);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 7px 4px;
+    text-decoration: underline;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  table.answers {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1100px;
+    font-size: 13px;
+    background: var(--surface);
+  }
+  table.answers th, table.answers td {
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  table.answers th {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+  }
+  table.answers tbody tr:hover { background: var(--surface-2); }
+  table.answers tbody tr:last-child td { border-bottom: none; }
+  .table-count { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+  .empty-note { color: var(--text-muted); font-size: 13.5px; }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .state-box { padding: 60px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+  .state-box.error { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="state-box" id="loading">Yanıtlar yükleniyor…</div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// CONFIG — reads the curated, moderated CSV that lives in this repo.
+// This file only changes when a sync-responses Pull Request is merged.
+// ---------------------------------------------------------------------------
+const CSV_URL = "data/responses.csv";
+
+// ---------------------------------------------------------------------------
+// Minimal RFC4180-ish CSV parser (handles quoted fields, embedded commas/newlines, "" escapes)
+// ---------------------------------------------------------------------------
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else { inQuotes = false; }
+      } else {
+        field += c;
+      }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { row.push(field); field = ""; }
+      else if (c === '\r') { /* skip */ }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+      else { field += c; }
+    }
+  }
+  if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r.length === 1 && r[0] !== ""));
+}
+
+const OUTLOOK_ORDER = ["Çok kötü", "Kötü", "Orta", "Parlak", "Çok parlak"];
+
+function parseSalaryBand(raw) {
+  const s = (raw || "").trim();
+  if (!s) return null;
+  if (s.includes("altı")) {
+    const top = parseFloat(s.split(" ")[0].replace(",", "."));
+    return isNaN(top) ? [s, null] : [s, top - 6.1];
+  }
+  if (s.includes("üstü")) {
+    const bottom = parseFloat(s.split(" ")[0].replace(",", "."));
+    return isNaN(bottom) ? [s, null] : [s, bottom + 6.1];
+  }
+  if (s.includes("-")) {
+    const parts = s.split("-");
+    if (parts.length === 2) {
+      const lo = parseFloat(parts[0].replace(",", "."));
+      const hi = parseFloat(parts[1].replace(",", "."));
+      if (!isNaN(lo) && !isNaN(hi)) return [s, (lo + hi) / 2];
+    }
+  }
+  return [s, null];
+}
+
+function parseOutlook(raw) {
+  const s = (raw || "").trim();
+  if (!s) return null;
+  const cat = s.split(",")[0].trim();
+  for (const known of OUTLOOK_ORDER) {
+    if (cat.startsWith(known)) return known;
+  }
+  return cat;
+}
+
+function counterOrdered(items, order) {
+  const counts = new Map();
+  if (order) for (const k of order) counts.set(k, 0);
+  for (const it of items) {
+    if (it === null || it === undefined) continue;
+    counts.set(it, (counts.get(it) || 0) + 1);
+  }
+  return counts;
+}
+
+function pct(n, total) { return total ? Math.round((100 * n / total) * 10) / 10 : 0; }
+function sumValues(map) { let t = 0; for (const v of map.values()) t += v; return t; }
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function barRows(counts, total, colorVar) {
+  const maxCount = Math.max(1, ...counts.values());
+  let out = "";
+  for (const [label, count] of counts.entries()) {
+    const width = Math.round((100 * count / maxCount) * 10) / 10;
+    const p = pct(count, total);
+    out += `
+      <div class="bar-row">
+        <div class="bar-label">${escapeHtml(label)}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${width}%; background: var(${colorVar});"></div></div>
+        <div class="bar-value">${count} <span class="bar-pct">(%${p})</span></div>
+      </div>`;
+  }
+  return out;
+}
+
+// Raw-table column definitions: index into the CSV row, display label, and
+// whether it gets a dropdown filter (categorical) or not (free text).
+const TABLE_COLUMNS = [
+  { idx: 0, label: "Tarih", filter: false },
+  { idx: 1, label: "Kurum", filter: true },
+  { idx: 2, label: "Sektör", filter: true },
+  { idx: 3, label: "Şirket", filter: false },
+  { idx: 4, label: "Pozisyon", filter: false },
+  { idx: 5, label: "Maaş", filter: true },
+  { idx: 6, label: "Tatmin", filter: true },
+  { idx: 7, label: "ARGE", filter: true },
+  { idx: 8, label: "Kıdem Süresi", filter: true },
+  { idx: 9, label: "İş Geleceği", filter: false },
+  { idx: 10, label: "Toplu Çıkarma", filter: true },
+  { idx: 11, label: "Ek Durum", filter: false },
+  { idx: 12, label: "İlk İş Süresi", filter: false },
+];
+
+let ALL_ROWS = [];
+
+function uniqueSorted(values) {
+  return [...new Set(values.filter(v => v && v.trim()))].sort((a, b) => a.localeCompare(b, "tr"));
+}
+
+function renderFilterBar() {
+  const filterCols = TABLE_COLUMNS.filter(c => c.filter);
+  let html = filterCols.map(c => {
+    const options = uniqueSorted(ALL_ROWS.map(r => r[c.idx]));
+    return `
+      <div class="filter-field">
+        <label for="f-${c.idx}">${escapeHtml(c.label)}</label>
+        <select id="f-${c.idx}" data-idx="${c.idx}">
+          <option value="">Tümü</option>
+          ${options.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}
+        </select>
+      </div>`;
+  }).join("");
+  html += `
+    <div class="filter-field">
+      <label for="f-search">Ara</label>
+      <input id="f-search" type="text" placeholder="pozisyon, şirket, not…">
+    </div>
+    <button class="filter-reset" id="f-reset" type="button">Filtreleri temizle</button>`;
+  return html;
+}
+
+function renderTableBody(rows) {
+  if (!rows.length) {
+    return `<tr><td colspan="${TABLE_COLUMNS.length}" class="empty-note">Bu filtrelerle eşleşen yanıt yok.</td></tr>`;
+  }
+  return rows.map(r => `
+    <tr>${TABLE_COLUMNS.map(c => `<td title="${escapeHtml(r[c.idx] || "")}">${escapeHtml(r[c.idx] || "—")}</td>`).join("")}</tr>
+  `).join("");
+}
+
+function applyFilters() {
+  const active = {};
+  document.querySelectorAll(".filter-field select").forEach(sel => {
+    if (sel.value) active[sel.dataset.idx] = sel.value;
+  });
+  const search = (document.getElementById("f-search").value || "").trim().toLocaleLowerCase("tr");
+
+  const filtered = ALL_ROWS.filter(r => {
+    for (const idx in active) {
+      if ((r[idx] || "") !== active[idx]) return false;
+    }
+    if (search) {
+      const hay = r.join(" ").toLocaleLowerCase("tr");
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  document.getElementById("answers-tbody").innerHTML = renderTableBody(filtered);
+  document.getElementById("answers-count").textContent = `${filtered.length} / ${ALL_ROWS.length} yanıt gösteriliyor`;
+}
+
+function wireUpFilters() {
+  document.querySelectorAll(".filter-field select, #f-search").forEach(el => {
+    el.addEventListener("input", applyFilters);
+    el.addEventListener("change", applyFilters);
+  });
+  document.getElementById("f-reset").addEventListener("click", () => {
+    document.querySelectorAll(".filter-field select").forEach(s => s.value = "");
+    document.getElementById("f-search").value = "";
+    applyFilters();
+  });
+}
+
+async function main() {
+  const app = document.getElementById("app");
+  let res, text;
+  try {
+    res = await fetch(CSV_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    text = await res.text();
+  } catch (err) {
+    app.innerHTML = `<div class="state-box error">Anket verisi yüklenemedi. (${escapeHtml(err.message)})<br>Lütfen daha sonra tekrar deneyin.</div>`;
+    return;
+  }
+
+  const rows = parseCSV(text);
+  const data = rows.slice(1).filter(r => r.some(c => (c || "").trim() !== ""));
+  ALL_ROWS = data;
+  const total = data.length;
+
+  const col = (i) => data.map(r => (r[i] || "").trim()).filter(Boolean);
+
+  const institutionCounts = counterOrdered(col(1));
+  const sectorCounts = counterOrdered(col(2));
+  const satisfactionCounts = counterOrdered(col(6));
+  const rndCounts = counterOrdered(col(7));
+  const promoCounts = counterOrdered(col(8));
+  const layoffCounts = counterOrdered(col(10));
+
+  const outlookVals = data.map(r => parseOutlook(r[9]));
+  const outlookCounts = counterOrdered(outlookVals, OUTLOOK_ORDER);
+
+  const salaryParsed = data.map(r => parseSalaryBand(r[5])).filter(p => p && p[0]);
+  const salaryLabelsOrder = [];
+  for (const [label] of salaryParsed) if (!salaryLabelsOrder.includes(label)) salaryLabelsOrder.push(label);
+  salaryLabelsOrder.sort((a, b) => {
+    const midOf = (label) => { const f = salaryParsed.find(p => p[0] === label && p[1] !== null); return f ? f[1] : 0; };
+    return midOf(a) - midOf(b);
+  });
+  const salaryCounts = counterOrdered(salaryParsed.map(p => p[0]), salaryLabelsOrder);
+  const midpoints = salaryParsed.map(p => p[1]).filter(m => m !== null);
+  const avgSalary = midpoints.length ? Math.round((midpoints.reduce((a, b) => a + b, 0) / midpoints.length) * 10) / 10 : null;
+
+  const firstJobCounts = counterOrdered(col(12));
+
+  const satisfiedYes = satisfactionCounts.get("Evet") || 0;
+  const rndYes = rndCounts.get("Evet") || 0;
+  const layoffYes = layoffCounts.get("Evet") || 0;
+
+  const now = new Date();
+  const trTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Istanbul" }));
+  const pad = (n) => String(n).padStart(2, "0");
+  const updated = `${pad(trTime.getDate())}.${pad(trTime.getMonth() + 1)}.${trTime.getFullYear()} ${pad(trTime.getHours())}:${pad(trTime.getMinutes())} (TR saati)`;
+
+  const instTotal = sumValues(institutionCounts);
+  const sectorTotal = sumValues(sectorCounts);
+  const outlookTotal = sumValues(outlookCounts);
+  const salaryTotal = sumValues(salaryCounts);
+  const promoTotal = sumValues(promoCounts);
+  const firstJobTotal = sumValues(firstJobCounts);
+
+  const avgSalaryStr = avgSalary !== null ? `${avgSalary.toFixed(1)} bin TL` : "—";
+  const satisfiedPct = pct(satisfiedYes, sumValues(satisfactionCounts));
+  const rndPct = pct(rndYes, sumValues(rndCounts));
+  const layoffPct = pct(layoffYes, sumValues(layoffCounts));
+
+  app.innerHTML = `
+  <header>
+    <div class="eyebrow">İTÜ Makina · Anket Sonuçları</div>
+    <h1>Yeni Mezun Makinacılar Çalışma Hayatı Anketi</h1>
+    <p class="subtitle">İTÜ Makina Mühendisliği mezunlarının iş hayatına dair gözlemlerini bir araya getiren canlı bir anket özeti.</p>
+    <div class="meta-row">
+      <span><b>${total}</b> yanıt</span>
+      <span>Son güncelleme: <b>${escapeHtml(updated)}</b></span>
+    </div>
+  </header>
+
+  <div class="stat-grid">
+    <div class="stat-tile"><div class="num">${total}</div><div class="lbl">Toplam katılım</div></div>
+    <div class="stat-tile"><div class="num">${avgSalaryStr}</div><div class="lbl">Ortalama maaş (yaklaşık)</div></div>
+    <div class="stat-tile"><div class="num">%${satisfiedPct}</div><div class="lbl">İşinden memnun</div></div>
+    <div class="stat-tile"><div class="num">%${rndPct}</div><div class="lbl">İş yerinde ARGE var</div></div>
+    <div class="stat-tile"><div class="num">%${layoffPct}</div><div class="lbl">Toplu işten çıkarma yaşanmış</div></div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Maaş dağılımı</h2>
+      <span class="section-note">bin TL / ay · kariyer.net aralıkları</span>
+    </div>
+    <div class="panel">${barRows(salaryCounts, salaryTotal, "--accent")}</div>
+  </section>
+
+  <div class="two-col">
+    <section>
+      <div class="section-head"><h2>Kurum niteliği</h2></div>
+      <div class="panel">${barRows(institutionCounts, instTotal, "--accent-2")}</div>
+    </section>
+    <section>
+      <div class="section-head"><h2>Sektör</h2></div>
+      <div class="panel">${barRows(sectorCounts, sectorTotal, "--accent-2")}</div>
+    </section>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Sektörün geleceğini ne kadar parlak görüyorlar?</h2>
+      <span class="section-note">kötüden iyiye</span>
+    </div>
+    <div class="panel">${barRows(outlookCounts, outlookTotal, "--accent")}</div>
+  </section>
+
+  <div class="two-col">
+    <section>
+      <div class="section-head"><h2>Kıdem / maaş atlama süresi</h2></div>
+      <div class="panel">${barRows(promoCounts, promoTotal, "--accent-2")}</div>
+    </section>
+    <section>
+      <div class="section-head"><h2>İlk işi bulma süresi</h2></div>
+      <div class="panel">${firstJobTotal ? barRows(firstJobCounts, firstJobTotal, "--accent-2") : '<p class="empty-note">Henüz yeterli veri yok.</p>'}</div>
+    </section>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Tüm yanıtlar</h2>
+      <span class="section-note">excel gibi filtrelenebilir</span>
+    </div>
+    <div class="panel">
+      <div class="filter-bar">${renderFilterBar()}</div>
+      <div class="table-scroll">
+        <table class="answers">
+          <thead><tr>${TABLE_COLUMNS.map(c => `<th>${escapeHtml(c.label)}</th>`).join("")}</tr></thead>
+          <tbody id="answers-tbody">${renderTableBody(ALL_ROWS)}</tbody>
+        </table>
+      </div>
+      <div class="table-count" id="answers-count">${total} / ${total} yanıt gösteriliyor</div>
+    </div>
+  </section>
+
+  <footer>
+    Bu sayfa İTÜ Makina öğrencileri arasında yürütülen bir ankete dayanmaktadır. Maaş ortalaması, kategorik aralıkların orta noktaları üzerinden yaklaşık olarak hesaplanmıştır. Gösterilen yanıtlar, saatlik senkronizasyon sonrası incelenip onaylanmış yanıtlardır.
+  </footer>
+  `;
+
+  wireUpFilters();
+}
+
+main();
+</script>
+</body>
+</html>
