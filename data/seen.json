@@ -20,7 +20,8 @@
     "25.08.2026 18:39:42",
     "25.08.2026 19:42:28",
     "25.08.2026 19:56:30",
-    "25.08.2026 20:24:56"
+    "25.08.2026 20:24:56",
+    "25.08.2026 20:48:56"
   ],
   "note": "Timestamps already reviewed. The last two (15:16:06, 15:37:08) were troll/hate-speech submissions and were deliberately left OUT of responses.csv — they are marked seen so the sync workflow won't propose them again in a future PR."
 }
