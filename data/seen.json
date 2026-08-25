@@ -1,0 +1,18 @@
+{
+  "seen_timestamps": [
+    "25.08.2026 13:20:42",
+    "25.08.2026 13:22:06",
+    "25.08.2026 13:29:00",
+    "25.08.2026 13:35:23",
+    "25.08.2026 13:43:53",
+    "25.08.2026 14:20:58",
+    "25.08.2026 14:50:17",
+    "25.08.2026 14:57:35",
+    "25.08.2026 14:58:35",
+    "25.08.2026 15:00:02",
+    "25.08.2026 15:08:33",
+    "25.08.2026 15:16:06",
+    "25.08.2026 15:37:08"
+  ],
+  "note": "Timestamps already reviewed. The last two (15:16:06, 15:37:08) were troll/hate-speech submissions and were deliberately left OUT of responses.csv — they are marked seen so the sync workflow won't propose them again in a future PR."
+}
